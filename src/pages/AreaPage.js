@@ -248,15 +248,28 @@ export default function AreaPage() {
                           <TableCell align="right">
                             <Stack direction="row" gap={1}>
                               {active ? (
-                                <LoadingButton color="error">Disable</LoadingButton>
+                                <LoadingButton
+                                  color="error"
+                                  disabled={!!areas.disabling}
+                                  loading={areas.disabling === id}
+                                  onClick={() => areas.disable(id)}
+                                >
+                                  Disable
+                                </LoadingButton>
                               ) : (
-                                <LoadingButton>Enable</LoadingButton>
+                                <LoadingButton
+                                  disabled={!!areas.enabling}
+                                  loading={areas.enabling === id}
+                                  onClick={() => areas.enable(id)}
+                                >
+                                  Enable
+                                </LoadingButton>
                               )}
                               {chairpersonId && (
                                 <LoadingButton
                                   disabled={areas.unassigning !== null}
-                                  loading={areas.unassigning === idx}
-                                  onClick={() => areas.unassign(idx)}
+                                  loading={areas.unassigning === id}
+                                  onClick={() => areas.unassign(id)}
                                   color="error"
                                 >
                                   Unassign

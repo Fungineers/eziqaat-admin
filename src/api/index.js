@@ -89,11 +89,11 @@ const createArea = () => {
 };
 
 const enableArea = ({ id }) => {
-  return api.post(`/area/${id}/enable`);
+  return api.patch(`/area/${id}/enable`);
 };
 
 const disableArea = ({ id }) => {
-  return api.post(`/area/${id}/disable`);
+  return api.patch(`/area/${id}/disable`);
 };
 
 const assignAreaToChairperson = ({ areaId, chairpersonId }) => {

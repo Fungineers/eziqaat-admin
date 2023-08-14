@@ -29,10 +29,11 @@ const useAreas = () => {
       });
   };
 
-  const unassign = (idx) => {
-    setUnassigning(idx);
-    console.log(data[idx]);
-    const { id: areaId } = data[idx];
+  const getIndex = (id) => data.findIndex((item) => item.id === id);
+
+  const unassign = (areaId) => {
+    setUnassigning(areaId);
+
     if (areaId) {
       api
         .unassignAreaFromChairperson({ areaId })
@@ -46,13 +47,10 @@ const useAreas = () => {
     }
   };
 
-  const enable = (idx) => {
-    setEnabling(idx);
-    console.log(data[idx]);
-    const { id: areaId } = data[idx];
-    if (areaId) {
+  const enable = (id) => {
+    if (id) {
       api
-        .enableArea({ areaId })
+        .enableArea({ id })
         .then(() => {
           fetch();
         })
@@ -63,13 +61,11 @@ const useAreas = () => {
     }
   };
 
-  const disable = (idx) => {
-    setDisabling(idx);
-    console.log(data[idx]);
-    const { id: areaId } = data[idx];
-    if (areaId) {
+  const disable = (id) => {
+    setDisabling(id);
+    if (id) {
       api
-        .disableArea({ areaId })
+        .disableArea({ id })
         .then(() => {
           fetch();
         })
@@ -85,8 +81,12 @@ const useAreas = () => {
     error,
     loading,
     unassigning,
+    enabling,
+    disabling,
     fetch,
     unassign,
+    enable,
+    disable,
   };
 };
 
