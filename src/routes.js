@@ -28,7 +28,7 @@ export default function Router() {
         { path: "chairperson", element: <ChairpersonPage /> },
         { path: "chairperson/create", element: <NewChairpersonPage /> },
         { path: "office-secretary", element: <OfficeSecretaryPage /> },
-        { path: "office-scretary/create", element: <NewOfficeSecretaryPage /> },
+        { path: "office-secretary/create", element: <NewOfficeSecretaryPage /> },
         { path: "donors", element: <DonorPage /> },
         { path: "donations", element: <UserPage /> },
         { path: "settings", element: <UserPage /> },

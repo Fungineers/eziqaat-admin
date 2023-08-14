@@ -1,4 +1,3 @@
-import { sentenceCase } from "change-case";
 import { filter } from "lodash";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -8,11 +7,8 @@ import {
   Card,
   Checkbox,
   Container,
-  IconButton,
   LinearProgress,
-  MenuItem,
   Paper,
-  Popover,
   Stack,
   Table,
   TableBody,
@@ -24,22 +20,21 @@ import {
 } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
-import Label from "../components/label";
 import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
 import useAreas from "src/hooks/useAreas";
-import moment from "moment/moment";
-import { LoadingButton } from "@mui/lab";
+import useOfficeSecretaries from "src/hooks/useOfficeSecretaries";
+import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "fullname", label: "Full Name", alignRight: false },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "Phone Number", label: "Phone Number", alignRight: false },
-  { id: "cnic", label: "CNIC" },
+  { id: "name", label: "Name", alignRight: false },
+  { id: "email", label: "Email Address", alignRight: false },
+  { id: "phone", label: "Phone Number", alignRight: false },
+  { id: "cnic", label: "CNIC Number" },
 ];
 
 // ----------------------------------------------------------------------
@@ -68,7 +63,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_area) => _area.areaName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_officeSecretary) => _officeSecretary.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -82,26 +77,17 @@ export default function OfficeSecretaryPage() {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState("areaName");
+  const [orderBy, setOrderBy] = useState("name");
 
   const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const areas = useAreas();
+  const officeSecretries = useOfficeSecretaries();
 
   useEffect(() => {
-    areas.fetch();
+    officeSecretries.fetch();
   }, []);
-
-  const handleOpenMenu = (event) => {
-    console.log(event.currentTarget);
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -111,7 +97,7 @@ export default function OfficeSecretaryPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = areas.data.map((n) => n.id);
+      const newSelecteds = officeSecretries.data.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -147,32 +133,40 @@ export default function OfficeSecretaryPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - areas.data.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - officeSecretries.data.length) : 0;
 
-  const filteredUsers = applySortFilter(areas.data, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(officeSecretries.data, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
+
+  const navigate = useNavigate();
 
   return (
     <>
       <Helmet>
-        <title> Office Scretary | Eziqaat Admin </title>
+        <title> Office Secretary | Eziqaat Admin </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Office Scretary
+            Office Secretary
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Office Scretary
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => {
+              navigate("/dashboard/office-secretary/create");
+            }}
+          >
+            New Office Secretary
           </Button>
         </Stack>
 
         <Card>
           <ListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          {areas.loading ? (
+          {officeSecretries.loading ? (
             <LinearProgress />
           ) : (
             <Scrollbar>
@@ -182,23 +176,14 @@ export default function OfficeSecretaryPage() {
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
-                    rowCount={areas.data.length}
+                    rowCount={officeSecretries.data.length}
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
-                      const {
-                        id,
-                        areaName,
-                        active,
-                        chairpersonId,
-                        chairpersonName,
-                        chairpersonPhone,
-                        chairpersonEmail,
-                        assignedAt,
-                      } = row;
+                      const { id, name, email, phone, cnic } = row;
                       const selectedArea = selected.indexOf(id) !== -1;
 
                       return (
@@ -210,32 +195,28 @@ export default function OfficeSecretaryPage() {
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                Saad Ashraf
+                                {name}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                saad@gmail.com
+                                {email}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                03361234567
+                                {phone}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                42101-12345678-0
+                                {cnic}
                               </Typography>
                             </Stack>
                           </TableCell>
@@ -280,7 +261,7 @@ export default function OfficeSecretaryPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={areas.data.length}
+            count={officeSecretries.data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

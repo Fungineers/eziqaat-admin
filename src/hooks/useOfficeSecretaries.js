@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useApi } from "src/api";
 
-const useAreas = () => {
+const useOfficeSecretaries = () => {
   const api = useApi();
 
   const [data, setData] = useState([]);
@@ -16,10 +16,10 @@ const useAreas = () => {
     setData([]);
     setError(null);
     api
-      .getAllAreas()
+      .getOfficeSecretaries()
       .then((res) => {
-        const { areas } = res.data;
-        setData(areas);
+        const { officeSecretaries } = res.data;
+        setData(officeSecretaries.map((o) => ({ ...o, name: `${o.firstName} ${o.lastName}` })));
       })
       .catch((err) => {
         setError(err?.response?.data?.message);
@@ -29,65 +29,12 @@ const useAreas = () => {
       });
   };
 
-  const getIndex = (id) => data.findIndex((item) => item.id === id);
-
-  const unassign = (areaId) => {
-    setUnassigning(areaId);
-
-    if (areaId) {
-      api
-        .unassignAreaFromChairperson({ areaId })
-        .then(() => {
-          fetch();
-        })
-        .catch((err) => {})
-        .finally(() => {
-          setUnassigning(null);
-        });
-    }
-  };
-
-  const enable = (id) => {
-    if (id) {
-      api
-        .enableArea({ id })
-        .then(() => {
-          fetch();
-        })
-        .catch((err) => {})
-        .finally(() => {
-          setEnabling(null);
-        });
-    }
-  };
-
-  const disable = (id) => {
-    setDisabling(id);
-    if (id) {
-      api
-        .disableArea({ id })
-        .then(() => {
-          fetch();
-        })
-        .catch((err) => {})
-        .finally(() => {
-          setDisabling(null);
-        });
-    }
-  };
-
   return {
     data,
     error,
     loading,
-    unassigning,
-    enabling,
-    disabling,
     fetch,
-    unassign,
-    enable,
-    disable,
   };
 };
 
-export default useAreas;
+export default useOfficeSecretaries;

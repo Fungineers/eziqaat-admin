@@ -81,7 +81,7 @@ const getChairpersons = () => {
 };
 
 const getOfficeSecretaries = () => {
-  return api.get("/area/all");
+  return api.get("/user/office-secretary");
 };
 
 const createArea = ({ areaName }) => {

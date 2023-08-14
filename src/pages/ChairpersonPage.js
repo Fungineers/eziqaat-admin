@@ -1,4 +1,3 @@
-import { sentenceCase } from "change-case";
 import { filter } from "lodash";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -21,14 +20,13 @@ import {
 } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
-import Label from "../components/label";
 import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
-import moment from "moment/moment";
-import useChairpersons from "../hooks/useChairpersons";
+import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
+import useChairpersons from "../hooks/useChairpersons";
 
 // ----------------------------------------------------------------------
 
@@ -187,7 +185,7 @@ export default function ChairpersonPage() {
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
-                      const { id, name, email, phone, cnic, areaName } = row;
+                      const { id, name, email, phone, cnic, areaId, areaName } = row;
                       const selectedArea = selected.indexOf(id) !== -1;
 
                       return (
@@ -232,20 +230,27 @@ export default function ChairpersonPage() {
                             </Stack>
                           </TableCell>
 
-                          {/* <TableCell align="right">
+                          <TableCell align="right">
                             <Stack direction="row" gap={1}>
-                              {chairpersonId && (
+                              {!!areaId ? (
                                 <LoadingButton
                                   disabled={chairpersons.unassigning !== null}
                                   loading={chairpersons.unassigning === id}
-                                  onClick={() => chairpersons.unassign(id)}
+                                  onClick={() => chairpersons.unassign(areaId)}
                                   color="error"
                                 >
                                   Unassign
                                 </LoadingButton>
+                              ) : (
+                                <Button
+                                  disabled={chairpersons.unassigning !== null}
+                                  onClick={() => chairpersons.unassign(areaId)}
+                                >
+                                  Assign
+                                </Button>
                               )}
                             </Stack>
-                          </TableCell> */}
+                          </TableCell>
                         </TableRow>
                       );
                     })}
