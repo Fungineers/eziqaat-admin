@@ -11,6 +11,9 @@ import AreaPage from "./pages/AreaPage";
 import ChairpersonPage from "./pages/ChairpersonPage";
 import DonorPage from "./pages/DonorPage";
 import OfficeSecretaryPage from "./pages/OfficeSecretaryPage";
+import NewAreaPage from "./pages/NewAreaPage";
+import NewChairpersonPage from "./pages/NewChairpersonPage";
+import NewOfficeSecretaryPage from "./pages/NewOfficeSecretaryPage";
 
 export default function Router() {
   const routes = useRoutes([
@@ -21,8 +24,11 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: "app", element: <DashboardAppPage /> },
         { path: "area", element: <AreaPage /> },
+        { path: "area/create", element: <NewAreaPage /> },
         { path: "chairperson", element: <ChairpersonPage /> },
+        { path: "chairperson/create", element: <NewChairpersonPage /> },
         { path: "office-secretary", element: <OfficeSecretaryPage /> },
+        { path: "office-scretary/create", element: <NewOfficeSecretaryPage /> },
         { path: "donors", element: <DonorPage /> },
         { path: "donations", element: <UserPage /> },
         { path: "settings", element: <UserPage /> },

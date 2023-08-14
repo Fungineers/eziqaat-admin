@@ -8,11 +8,8 @@ import {
   Card,
   Checkbox,
   Container,
-  IconButton,
   LinearProgress,
-  MenuItem,
   Paper,
-  Popover,
   Stack,
   Table,
   TableBody,
@@ -29,9 +26,10 @@ import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
-import useAreas from "src/hooks/useAreas";
-import moment from "moment/moment";
 import { LoadingButton } from "@mui/lab";
+import moment from "moment/moment";
+import { useNavigate } from "react-router-dom";
+import useAreas from "src/hooks/useAreas";
 
 // ----------------------------------------------------------------------
 
@@ -74,8 +72,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function AreaPage() {
-  const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
@@ -90,18 +86,11 @@ export default function AreaPage() {
 
   const areas = useAreas();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     areas.fetch();
   }, []);
-
-  const handleOpenMenu = (event) => {
-    console.log(event.currentTarget);
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -149,9 +138,9 @@ export default function AreaPage() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - areas.data.length) : 0;
 
-  const filteredUsers = applySortFilter(areas.data, getComparator(order, orderBy), filterName);
+  const filteredAreas = applySortFilter(areas.data, getComparator(order, orderBy), filterName);
 
-  const isNotFound = !filteredUsers.length && !!filterName;
+  const isNotFound = !filteredAreas.length && !!filterName;
 
   return (
     <>
@@ -164,7 +153,13 @@ export default function AreaPage() {
           <Typography variant="h4" gutterBottom>
             Areas
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => {
+              navigate("/dashboard/area/create");
+            }}
+          >
             New Area
           </Button>
         </Stack>
@@ -188,7 +183,7 @@ export default function AreaPage() {
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
-                    {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
+                    {filteredAreas.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
                       const {
                         id,
                         areaName,

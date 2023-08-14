@@ -64,16 +64,8 @@ const createUser = ({ firstName, lastName, email, phone, cnic, role }) => {
   });
 };
 
-const getOfficeSecretaries = (s = "") => {
-  return api.get(`/office-secretary`, { params: { s } });
-};
-
 const getOfficeSecretaryById = (id) => {
   return api.get(`/office-secretary/${id}`);
-};
-
-const getChairpersons = (s = "") => {
-  return api.get("/chairperson", { params: { s } });
 };
 
 const getChairpersonById = (id) => {
@@ -84,8 +76,16 @@ const getAllAreas = () => {
   return api.get("/area/all");
 };
 
-const createArea = () => {
-  return api.post("/area");
+const getChairpersons = () => {
+  return api.get("/user/chairperson");
+};
+
+const getOfficeSecretaries = () => {
+  return api.get("/area/all");
+};
+
+const createArea = ({ areaName }) => {
+  return api.post("/area", { areaName });
 };
 
 const enableArea = ({ id }) => {

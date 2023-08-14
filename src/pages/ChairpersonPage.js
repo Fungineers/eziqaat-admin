@@ -8,11 +8,8 @@ import {
   Card,
   Checkbox,
   Container,
-  IconButton,
   LinearProgress,
-  MenuItem,
   Paper,
-  Popover,
   Stack,
   Table,
   TableBody,
@@ -29,19 +26,19 @@ import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
-import useAreas from "src/hooks/useAreas";
 import moment from "moment/moment";
-import { LoadingButton } from "@mui/lab";
+import useChairpersons from "../hooks/useChairpersons";
+import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "fullname", label: "Full Name", alignRight: false },
-  { id: "active", label: "Active" },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "phonenumber", label: "Phone Number", alignRight: false },
-  { id: "cnic", label: "CNIC" },
-  { id: "Area", label: "Assigned Area" },
+  { id: "name", label: "Full Name", alignRight: false },
+  { id: "email", label: "Email Address", alignRight: false },
+  { id: "phone", label: "Phone Number", alignRight: false },
+  { id: "cnic", label: "CNIC Number", alignRight: false },
+  { id: "areaName", label: "Assigned Area", alignRight: false },
+  { id: "Actions", label: "Actions", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -70,7 +67,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_area) => _area.areaName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_chairperson) => _chairperson.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -84,26 +81,17 @@ export default function ChairpersonPage() {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState("areaName");
+  const [orderBy, setOrderBy] = useState("name");
 
   const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const areas = useAreas();
+  const chairpersons = useChairpersons();
 
   useEffect(() => {
-    areas.fetch();
+    chairpersons.fetch();
   }, []);
-
-  const handleOpenMenu = (event) => {
-    console.log(event.currentTarget);
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -113,7 +101,7 @@ export default function ChairpersonPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = areas.data.map((n) => n.id);
+      const newSelecteds = chairpersons.data.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -149,11 +137,13 @@ export default function ChairpersonPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - areas.data.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - chairpersons.data.length) : 0;
 
-  const filteredUsers = applySortFilter(areas.data, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(chairpersons.data, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -166,7 +156,13 @@ export default function ChairpersonPage() {
           <Typography variant="h4" gutterBottom>
             Chairpersons
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => {
+              navigate("/dashboard/chairperson/create");
+            }}
+          >
             New Chairperson
           </Button>
         </Stack>
@@ -174,7 +170,7 @@ export default function ChairpersonPage() {
         <Card>
           <ListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          {areas.loading ? (
+          {chairpersons.loading ? (
             <LinearProgress />
           ) : (
             <Scrollbar>
@@ -184,23 +180,14 @@ export default function ChairpersonPage() {
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
-                    rowCount={areas.data.length}
+                    rowCount={chairpersons.data.length}
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
-                      const {
-                        id,
-                        areaName,
-                        active,
-                        chairpersonId,
-                        chairpersonName,
-                        chairpersonPhone,
-                        chairpersonEmail,
-                        assignedAt,
-                      } = row;
+                      const { id, name, email, phone, cnic, areaName } = row;
                       const selectedArea = selected.indexOf(id) !== -1;
 
                       return (
@@ -212,72 +199,46 @@ export default function ChairpersonPage() {
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                Saad Ashraf
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left">
-                            <Label color={active ? "success" : "error"}>
-                              {sentenceCase(active ? "Active" : "Inactve")}
-                            </Label>
-                          </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                saadjewani@test.com
+                                {name}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                03341234567
+                                {email}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                42101-12345678-9
+                                {phone}
                               </Typography>
                             </Stack>
                           </TableCell>
-
-                          <TableCell align="left">
-                            {!chairpersonId ? (
-                              <Typography variant="subtitle1" noWrap>
-                                (Unassigned)
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Typography variant="subtitle2" noWrap>
+                                {cnic}
                               </Typography>
-                            ) : (
-                              <Stack direction="column">
-                                <Typography variant="subtitle1" noWrap>
-                                  {chairpersonName}
-                                </Typography>
-                                <Typography variant="subtitle2" color="gray" noWrap>
-                                  (Ph) {chairpersonPhone}
-                                </Typography>
-                                <Typography variant="subtitle2" color="gray" noWrap>
-                                  (Email) {chairpersonEmail}
-                                </Typography>
-                                <Typography variant="caption" noWrap>
-                                  {moment(new Date(assignedAt)).format("LLL")} ({moment(new Date(assignedAt)).fromNow()}
-                                  )
-                                </Typography>
-                              </Stack>
-                            )}
+                            </Stack>
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Typography variant="subtitle2" noWrap>
+                                {areaName || "(Unassigned)"}
+                              </Typography>
+                            </Stack>
                           </TableCell>
 
                           {/* <TableCell align="right">
                             <Stack direction="row" gap={1}>
                               {chairpersonId && (
                                 <LoadingButton
-                                  disabled={areas.unassigning !== null}
-                                  loading={areas.unassigning === id}
-                                  onClick={() => areas.unassign(id)}
+                                  disabled={chairpersons.unassigning !== null}
+                                  loading={chairpersons.unassigning === id}
+                                  onClick={() => chairpersons.unassign(id)}
                                   color="error"
                                 >
                                   Unassign
@@ -326,7 +287,7 @@ export default function ChairpersonPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={areas.data.length}
+            count={chairpersons.data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
