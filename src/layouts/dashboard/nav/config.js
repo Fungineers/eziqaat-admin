@@ -1,40 +1,56 @@
 // component
-import SvgColor from '../../../components/svg-color';
+import SvgColor from "../../../components/svg-color";
 
 // ----------------------------------------------------------------------
 
-const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
-
 const navConfig = [
   {
-    title: 'dashboard',
-    path: '/dashboard/app',
-    icon: icon('ic_analytics'),
+    title: "dashboard",
+    path: "/dashboard/app",
   },
   {
-    title: 'user',
-    path: '/dashboard/user',
-    icon: icon('ic_user'),
+    title: "Areas",
+    path: "/dashboard/area",
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: icon('ic_cart'),
+    title: "Chairpersons",
+    path: "/dashboard/chairperson",
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
-    icon: icon('ic_blog'),
+    title: "Office Secretaries",
+    path: "/dashboard/office-secretary",
   },
   {
-    title: 'login',
-    path: '/login',
-    icon: icon('ic_lock'),
+    title: "Donors",
+    path: "/dashboard/donors",
   },
   {
-    title: 'Not found',
-    path: '/404',
-    icon: icon('ic_disabled'),
+    title: "Donations",
+    path: "/dashboard/donations",
+  },
+  {
+    title: "Settings",
+    path: "/dashboard/settings",
+  },
+  {
+    title: "user",
+    path: "/dashboard/user",
+  },
+  {
+    title: "product",
+    path: "/dashboard/products",
+  },
+  {
+    title: "blog",
+    path: "/dashboard/blog",
+  },
+  {
+    title: "login",
+    path: "/login",
+  },
+  {
+    title: "Not found",
+    path: "/404",
   },
 ];
 
