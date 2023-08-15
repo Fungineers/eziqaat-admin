@@ -18,6 +18,7 @@ import OfficeSecretaryPage from "./pages/OfficeSecretaryPage";
 import Page404 from "./pages/Page404";
 import NewCollectionPage from "./pages/NewCollectionPage";
 import SettingsPage from "./pages/SettingsPage";
+import ForgetPassword from "./pages/ForgetPassword";
 
 export default function Router() {
   const auth = useAuth();
@@ -34,6 +35,10 @@ export default function Router() {
     {
       path: "*",
       element: <Navigate to="/login" />,
+    },
+    {
+      path: "forgetPassword",
+      element: <ForgetPassword />,
     },
   ]);
 

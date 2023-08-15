@@ -1,10 +1,11 @@
 import { useState } from "react";
 // @mui
 import { LoadingButton } from "@mui/lab";
-import { IconButton, InputAdornment, Link, Stack, TextField } from "@mui/material";
+import { IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 // components
 import useLogin from "src/hooks/useLogin";
 import Iconify from "../../../components/iconify";
+import { Link } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -45,8 +46,8 @@ export default function LoginForm() {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Link variant="subtitle2" underline="hover">
+      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2, cursor: "pointer" }}>
+        <Link to={"/forgetPassword"} sx={{ textDecoration: "none" }} variant="subtitle2">
           Forgot password?
         </Link>
       </Stack>

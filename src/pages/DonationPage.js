@@ -22,6 +22,7 @@ import {
 import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
+import Moment from "react-moment";
 // mock
 import { sentenceCase } from "change-case";
 import { useNavigate } from "react-router-dom";
@@ -36,6 +37,7 @@ const TABLE_HEAD = [
   { id: "donor", label: "Donor", alignRight: false },
   { id: "amount", label: "Amount (Rs)", alignRight: false },
   { id: "address", label: "Address", alignRight: false },
+  { id: "time", label: "Timeline", alignRight: false },
   { id: "status", label: "Status" },
 ];
 
@@ -198,12 +200,12 @@ export default function DonationPage() {
                         // donorId,
                         // workerId,
                         // areaId,
-                        // createdAt,
+                        createdAt,
                         // updatedAt,
-                        // requestedAt,
-                        // approvedAt,
-                        // acceptedAt,
-                        // collectedAt,
+                        requestedAt,
+                        approvedAt,
+                        acceptedAt,
+                        collectedAt,
                         // areaName,
                         // chairpersonId,
                         // active,
@@ -228,7 +230,6 @@ export default function DonationPage() {
                           <TableCell padding="checkbox">
                             <Checkbox checked={selectedArea} onChange={(event) => handleClick(event, id)} />
                           </TableCell>
-
                           <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="column">
                               <Typography variant="subtitle1" noWrap>
@@ -254,6 +255,38 @@ export default function DonationPage() {
                               <Typography variant="subtitle2" noWrap>
                                 {address || "On-Premises"}
                               </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="normal">
+                            <Stack direction="column">
+                              {requestedAt && (
+                                <Typography variant="subtitle2" noWrap>
+                                  Requested At: &nbsp;
+                                  <Moment style={{ color: "gray" }} date={requestedAt} format="DD/MM/YYYY hh:mm A" />
+                                </Typography>
+                              )}
+                              {(approvedAt || createdAt) && (
+                                <Typography variant="subtitle2" noWrap>
+                                  Approved At: &nbsp;
+                                  <Moment
+                                    style={{ color: "gray" }}
+                                    date={approvedAt || createdAt}
+                                    format="DD/MM/YYYY hh:mm A"
+                                  />
+                                </Typography>
+                              )}
+                              {acceptedAt && (
+                                <Typography variant="subtitle2" noWrap>
+                                  Accepted At: &nbsp;
+                                  <Moment style={{ color: "gray" }} date={acceptedAt} format="DD/MM/YYYY hh:mm A" />
+                                </Typography>
+                              )}
+                              {collectedAt && (
+                                <Typography variant="subtitle2" noWrap>
+                                  Collected At: &nbsp;
+                                  <Moment style={{ color: "gray" }} date={collectedAt} format="DD/MM/YYYY hh:mm A" />
+                                </Typography>
+                              )}
                             </Stack>
                           </TableCell>
                           <TableCell align="left">
