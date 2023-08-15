@@ -5,6 +5,7 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover 
 // mocks_
 import account from "../../../_mock/account";
 import { useAuth } from "src/contexts/auth.context";
+import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -12,14 +13,12 @@ const MENU_OPTIONS = [
   {
     label: "Home",
     icon: "eva:home-fill",
-  },
-  {
-    label: "Profile",
-    icon: "eva:person-fill",
+    path: "dashboard",
   },
   {
     label: "Settings",
     icon: "eva:settings-2-fill",
+    path: "settings",
   },
 ];
 
@@ -27,6 +26,8 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const auth = useAuth();
+  const user = auth?.data?.user;
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
 
@@ -34,8 +35,11 @@ export default function AccountPopover() {
     setOpen(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (path) => {
     setOpen(null);
+    if (path) {
+      navigate(path);
+    }
   };
 
   return (
@@ -57,7 +61,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src="/assets/images/avatars/avatar_default.jpg" alt="photoURL" />
       </IconButton>
 
       <Popover
@@ -71,7 +75,7 @@ export default function AccountPopover() {
             p: 0,
             mt: 1.5,
             ml: 0.75,
-            width: 180,
+            width: 200,
             "& .MuiMenuItem-root": {
               typography: "body2",
               borderRadius: 0.75,
@@ -81,10 +85,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {user?.firstName} {user?.lastName}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {account.email}
+            {user?.email}
           </Typography>
         </Box>
 
@@ -92,7 +96,7 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleClose}>
+            <MenuItem key={option.label} onClick={() => handleClose(option.path)}>
               {option.label}
             </MenuItem>
           ))}

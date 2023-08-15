@@ -30,10 +30,10 @@ import { sentenceCase } from "change-case";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "name", label: "Name", alignRight: false },
-  { id: "email", label: "Email Address", alignRight: false },
-  { id: "phone", label: "Phone Number", alignRight: false },
-  { id: "cnic", label: "CNIC Number" },
+  { id: "donor", label: "Donor", alignRight: false },
+  { id: "amount", label: "Amount (Rs)", alignRight: false },
+  { id: "address", label: "Address", alignRight: false },
+  { id: "status", label: "Status" },
 ];
 
 // ----------------------------------------------------------------------
@@ -230,7 +230,7 @@ export default function DonationPage() {
                           <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {amount}
+                                {amount}/Rs
                               </Typography>
                             </Stack>
                           </TableCell>

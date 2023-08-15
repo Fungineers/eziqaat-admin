@@ -17,6 +17,7 @@ import NewOfficeSecretaryPage from "./pages/NewOfficeSecretaryPage";
 import { useAuth } from "./contexts/auth.context";
 import { Box, CircularProgress, LinearProgress, Stack } from "@mui/material";
 import DonationPage from "./pages/DonationPage";
+import SettingsPage from "./pages/SettingsPage";
 
 export default function Router() {
   const auth = useAuth();
@@ -51,7 +52,7 @@ export default function Router() {
         { path: "office-secretary/create", element: <NewOfficeSecretaryPage /> },
         { path: "donors", element: <DonorPage /> },
         { path: "donations", element: <DonationPage /> },
-        { path: "settings", element: <UserPage /> },
+        { path: "settings", element: <SettingsPage /> },
       ],
     },
     {
@@ -69,7 +70,7 @@ export default function Router() {
         { path: "app", element: <DashboardAppPage /> },
         { path: "donors", element: <DonorPage /> },
         { path: "donations", element: <DonationPage /> },
-        { path: "settings", element: <UserPage /> },
+        { path: "settings", element: <SettingsPage /> },
       ],
     },
     {

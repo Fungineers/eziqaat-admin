@@ -14,6 +14,7 @@ import Scrollbar from "../../../components/scrollbar";
 import NavSection from "../../../components/nav-section";
 //
 import useNavConfig from "./config";
+import { useAuth } from "src/contexts/auth.context";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,8 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
+  const auth = useAuth();
+  const user = auth?.data?.user;
 
   const isDesktop = useResponsive("up", "lg");
 
@@ -62,18 +65,18 @@ export default function Nav({ openNav, onCloseNav }) {
         </Typography>
       </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
+      <Box sx={{ mb: 5, mx: 1.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src="/assets/images/avatars/avatar_default.jpg" alt="photoURL" />
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {account.displayName}
+                {user?.firstName} {user?.lastName}
               </Typography>
 
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {account.role}
+                {user?.role}
               </Typography>
             </Box>
           </StyledAccount>
