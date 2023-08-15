@@ -120,6 +120,10 @@ const addNewCollection = ({ refName, refPhone, amount }) => {
   return api.post(`/donation/inhouse-collection`, { refName, refPhone, amount });
 };
 
+const getAdminStats = () => {
+  return api.get("/user/admin-stats");
+};
+
 export const useApi = () => {
   return {
     login,
@@ -127,6 +131,7 @@ export const useApi = () => {
     changePhone,
     requestOtp,
     changeEmail,
+    getAdminStats,
     verifyEmail,
     changePassword,
     resetPassword,

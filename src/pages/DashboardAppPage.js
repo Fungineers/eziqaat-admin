@@ -1,15 +1,38 @@
 import { Helmet } from "react-helmet-async";
 // @mui
-import { Container, Grid, Typography } from "@mui/material";
+import { CircularProgress, Container, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 // components
 // sections
 import { AppConversionRates, AppCurrentVisits, AppWebsiteVisits, AppWidgetSummary } from "../sections/@dashboard/app";
-
+import useDashboard from "src/hooks/useDashboard";
+import { useEffect } from "react";
 // ----------------------------------------------------------------------
+
+function getPastDates(numDates) {
+  const dates = [];
+  const today = new Date();
+
+  for (let i = 0; i < numDates; i++) {
+    const date = new Date(today.getTime() - i * 7 * 24 * 60 * 60 * 1000);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const formattedDate = `${month}/${day}/${year}`;
+    dates.push(formattedDate);
+  }
+
+  return dates;
+}
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+
+  const dashboard = useDashboard();
+
+  useEffect(() => {
+    dashboard.fetch();
+  }, []);
 
   return (
     <>
@@ -22,95 +45,96 @@ export default function DashboardAppPage() {
           Hi, Welcome back
         </Typography>
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={4}>
-            <AppWidgetSummary
-              title="Total Collections"
-              total={900}
-              color="info"
-              icon={"mdi:collections-bookmark-outline"}
-            />
-          </Grid>
+        {dashboard.loading ? (
+          <CircularProgress />
+        ) : (
+          dashboard.data && (
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6} md={3}>
+                <AppWidgetSummary
+                  title="Current Requests"
+                  total={dashboard.data.countStats["REQUESTED"]}
+                  color="warning"
+                  icon={"mdi:collections-bookmark-outline"}
+                />
+              </Grid>
 
-          <Grid item xs={12} sm={6} md={4}>
-            <AppWidgetSummary
-              title="Pending Donations"
-              total={150}
-              color="warning"
-              icon={"ic:baseline-pending-actions"}
-            />
-          </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <AppWidgetSummary
+                  title="Current Pending"
+                  total={dashboard.data.countStats["PENDING"]}
+                  color="error"
+                  icon={"ic:baseline-pending-actions"}
+                />
+              </Grid>
 
-          <Grid item xs={12} sm={6} md={4}>
-            <AppWidgetSummary title="New Donors" total={50} color="error" icon={"mdi:donation"} />
-          </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <AppWidgetSummary
+                  title="Accepted"
+                  total={dashboard.data.countStats["ACCEPTED"]}
+                  color="info"
+                  icon={"mdi:collections-bookmark-outline"}
+                />
+              </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
-            <AppWebsiteVisits
-              title="Total Collections"
-              subheader="Weekly Representation"
-              chartLabels={[
-                "06/04/2023",
-                "06/11/2023",
-                "06/18/2023",
-                "06/25/2023",
-                "07/02/2023",
-                "07/09/2023",
-                "07/16/2023",
-                "07/23/2023",
-                "07/30/2023",
-                "08/06/2023",
-                "08/13/2023",
-              ]}
-              chartData={[
-                {
-                  name: "Collections",
-                  type: "column",
-                  fill: "solid",
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                },
-              ]}
-            />
-          </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <AppWidgetSummary
+                  title="Collections"
+                  total={dashboard.data.countStats["COLLECTED"]}
+                  color="success"
+                  icon={"mdi:donation"}
+                />
+              </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentVisits
-              title="Area Collections"
-              subheader="Most Collection Areas"
-              chartData={[
-                { label: "Gulshan-e-Iqbal", value: 250 },
-                { label: "Gulistan-e-Johar", value: 144 },
-                { label: "University Road", value: 356 },
-                { label: "Sadar", value: 150 },
-              ]}
-              chartColors={[
-                theme.palette.primary.main,
-                theme.palette.info.main,
-                theme.palette.warning.main,
-                theme.palette.error.main,
-              ]}
-            />
-          </Grid>
+              <Grid item xs={12} md={6} lg={8}>
+                <AppWebsiteVisits
+                  title="Total Collections"
+                  subheader="Weekly Representation"
+                  chartLabels={getPastDates(10)}
+                  chartData={[
+                    {
+                      name: "Collections",
+                      type: "column",
+                      fill: "solid",
+                      data: dashboard.data?.weeklyData?.map((d) => d.collectionCount),
+                    },
+                  ]}
+                />
+              </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
-            <AppConversionRates
-              title="Comparison from last Year"
-              subheader="(+43%) than last year"
-              chartData={[
-                { label: "Italy", value: 400 },
-                { label: "Japan", value: 430 },
-                { label: "China", value: 448 },
-                { label: "Canada", value: 470 },
-                { label: "France", value: 540 },
-                { label: "Germany", value: 580 },
-                { label: "South Korea", value: 690 },
-                { label: "Netherlands", value: 1100 },
-                { label: "United States", value: 1200 },
-                { label: "United Kingdom", value: 1380 },
-              ]}
-            />
-          </Grid>
-        </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <AppCurrentVisits
+                  title="Area Collections"
+                  subheader="Comparing collection count"
+                  chartData={dashboard.data?.areaStats?.map((a) => ({ label: a.areaName, value: a.collectionCount }))}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={8}>
+                <AppWebsiteVisits
+                  title={`Total Cash Flow - PKR ${Intl.NumberFormat("en-US").format(dashboard.data?.cashFlow)}`}
+                  subheader="Weekly Representation"
+                  chartLabels={getPastDates(10)}
+                  chartData={[
+                    {
+                      name: "Cash Flow",
+                      type: "column",
+                      fill: "solid",
+                      data: dashboard.data?.weeklyData?.map((d) => d.totalAmount),
+                    },
+                  ]}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <AppCurrentVisits
+                  title="Area Cash Flows"
+                  subheader="Comparing collection amounts"
+                  chartData={dashboard.data?.areaStats?.map((a) => ({ label: a.areaName, value: a.cashFlow }))}
+                />
+              </Grid>
+            </Grid>
+          )
+        )}
       </Container>
     </>
   );
