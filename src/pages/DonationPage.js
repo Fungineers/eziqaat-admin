@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 // @mui
 import {
+  Button,
   Card,
   Checkbox,
   Container,
@@ -26,6 +27,8 @@ import { useNavigate } from "react-router-dom";
 import useDonations from "src/hooks/useDonations";
 import Label from "src/components/label/Label";
 import { sentenceCase } from "change-case";
+import Iconify from "src/components/iconify/Iconify";
+import { useAuth } from "src/contexts/auth.context";
 
 // ----------------------------------------------------------------------
 
@@ -140,6 +143,8 @@ export default function DonationPage() {
 
   const navigate = useNavigate();
 
+  const auth = useAuth();
+
   return (
     <>
       <Helmet>
@@ -151,6 +156,17 @@ export default function DonationPage() {
           <Typography variant="h4" gutterBottom>
             Donations
           </Typography>
+          {auth.data.user?.role === "OFFICE_SECRETARY" && (
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              onClick={() => {
+                navigate("/dashboard/donations/create");
+              }}
+            >
+              New Collection
+            </Button>
+          )}
         </Stack>
 
         <Card>

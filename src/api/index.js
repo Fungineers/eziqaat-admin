@@ -116,6 +116,10 @@ const unassignAreaFromChairperson = ({ areaId }) => {
   return api.patch(`/area/${areaId}/unassign`);
 };
 
+const addNewCollection = ({ refName, refPhone, amount }) => {
+  return api.post(`/donation/inhouse-collection`, { refName, refPhone, amount });
+};
+
 export const useApi = () => {
   return {
     login,
@@ -140,5 +144,6 @@ export const useApi = () => {
     unassignAreaFromChairperson,
     enableArea,
     disableArea,
+    addNewCollection,
   };
 };
