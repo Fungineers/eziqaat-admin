@@ -75,7 +75,6 @@ const useChairpersons = () => {
     assign,
     fetch,
     unassign,
-    assign,
   };
 };
 

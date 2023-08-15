@@ -17,6 +17,7 @@ import NewOfficeSecretaryPage from "./pages/NewOfficeSecretaryPage";
 import OfficeSecretaryPage from "./pages/OfficeSecretaryPage";
 import Page404 from "./pages/Page404";
 import NewCollectionPage from "./pages/NewCollectionPage";
+import SettingsPage from "./pages/SettingsPage";
 
 export default function Router() {
   const auth = useAuth();
@@ -51,7 +52,7 @@ export default function Router() {
         { path: "office-secretary/create", element: <NewOfficeSecretaryPage /> },
         { path: "donors", element: <DonorPage /> },
         { path: "donations", element: <DonationPage /> },
-        // { path: "settings", element: <UserPage /> },
+        { path: "settings", element: <SettingsPage /> },
       ],
     },
     {
@@ -70,7 +71,7 @@ export default function Router() {
         { path: "donors", element: <DonorPage /> },
         { path: "donations", element: <DonationPage /> },
         { path: "donations/create", element: <NewCollectionPage /> },
-        // { path: "settings", element: <UserPage /> },
+        { path: "settings", element: <SettingsPage /> },
       ],
     },
     {

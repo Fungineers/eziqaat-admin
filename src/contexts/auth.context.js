@@ -84,6 +84,7 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  // eslint-disable-next-line
   useEffect(authenticate, []);
 
   const signin = ({ credential, password }) => {

@@ -2,17 +2,17 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // @mui
-import { styled, alpha } from "@mui/material/styles";
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from "@mui/material";
+import { Avatar, Box, Drawer, Link, Typography } from "@mui/material";
+import { alpha, styled } from "@mui/material/styles";
 // hooks
 import useResponsive from "../../../hooks/useResponsive";
 // components
 import Logo from "../../../components/logo";
-import Scrollbar from "../../../components/scrollbar";
 import NavSection from "../../../components/nav-section";
+import Scrollbar from "../../../components/scrollbar";
 //
-import useNavConfig from "./config";
 import useAccount from "src/hooks/useAccount";
+import useNavConfig from "./config";
 
 // ----------------------------------------------------------------------
 
@@ -63,10 +63,10 @@ export default function Nav({ openNav, onCloseNav }) {
         </Typography>
       </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
+      <Box sx={{ mb: 5, mx: 1.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src="/assets/images/avatars/avatar_default.jpg" alt="photoURL" />
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
@@ -74,7 +74,7 @@ export default function Nav({ openNav, onCloseNav }) {
               </Typography>
 
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {account.role}
+                {account.email}
               </Typography>
             </Box>
           </StyledAccount>

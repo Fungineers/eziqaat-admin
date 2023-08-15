@@ -23,20 +23,20 @@ import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
-import { useNavigate } from "react-router-dom";
-import useDonations from "src/hooks/useDonations";
-import Label from "src/components/label/Label";
 import { sentenceCase } from "change-case";
+import { useNavigate } from "react-router-dom";
 import Iconify from "src/components/iconify/Iconify";
+import Label from "src/components/label/Label";
 import { useAuth } from "src/contexts/auth.context";
+import useDonations from "src/hooks/useDonations";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "name", label: "Name", alignRight: false },
-  { id: "email", label: "Email Address", alignRight: false },
-  { id: "phone", label: "Phone Number", alignRight: false },
-  { id: "cnic", label: "CNIC Number" },
+  { id: "donor", label: "Donor", alignRight: false },
+  { id: "amount", label: "Amount (Rs)", alignRight: false },
+  { id: "address", label: "Address", alignRight: false },
+  { id: "status", label: "Status" },
 ];
 
 // ----------------------------------------------------------------------
@@ -71,8 +71,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function DonationPage() {
-  const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
@@ -89,6 +87,7 @@ export default function DonationPage() {
 
   useEffect(() => {
     donations.fetch();
+    // eslint-disable-next-line
   }, []);
 
   const handleRequestSort = (event, property) => {
@@ -196,31 +195,31 @@ export default function DonationPage() {
                         status,
                         refName,
                         refPhone,
-                        donorId,
-                        workerId,
-                        areaId,
-                        createdAt,
-                        updatedAt,
-                        requestedAt,
-                        approvedAt,
-                        acceptedAt,
-                        collectedAt,
-                        areaName,
-                        chairpersonId,
-                        active,
-                        assignedAt,
-                        chairpersonName,
-                        chairpersonPhone,
-                        chairpersonCnic,
-                        chairpersonEmail,
+                        // donorId,
+                        // workerId,
+                        // areaId,
+                        // createdAt,
+                        // updatedAt,
+                        // requestedAt,
+                        // approvedAt,
+                        // acceptedAt,
+                        // collectedAt,
+                        // areaName,
+                        // chairpersonId,
+                        // active,
+                        // assignedAt,
+                        // chairpersonName,
+                        // chairpersonPhone,
+                        // chairpersonCnic,
+                        // chairpersonEmail,
                         donorName,
                         donorPhone,
-                        donorCnic,
+                        // donorCnic,
                         donorEmail,
-                        workerName,
-                        workerPhone,
-                        workerCnic,
-                        workerEmail,
+                        // workerName,
+                        // workerPhone,
+                        // workerCnic,
+                        // workerEmail,
                       } = row;
                       const selectedArea = selected.indexOf(id) !== -1;
 
@@ -246,7 +245,7 @@ export default function DonationPage() {
                           <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {amount}
+                                {amount}/Rs
                               </Typography>
                             </Stack>
                           </TableCell>

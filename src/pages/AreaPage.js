@@ -4,14 +4,12 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 // @mui
 import {
-  Box,
   Button,
   Card,
   Checkbox,
   Container,
   LinearProgress,
   Paper,
-  Popover,
   Stack,
   Table,
   TableBody,
@@ -92,6 +90,7 @@ export default function AreaPage() {
 
   useEffect(() => {
     areas.fetch();
+    // eslint-disable-next-line
   }, []);
 
   const handleRequestSort = (event, property) => {

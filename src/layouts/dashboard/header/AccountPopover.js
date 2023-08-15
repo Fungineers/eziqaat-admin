@@ -37,8 +37,11 @@ export default function AccountPopover() {
     setOpen(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (path) => {
     setOpen(null);
+    if (path) {
+      navigate(path);
+    }
   };
 
   return (
@@ -60,7 +63,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src="/assets/images/avatars/avatar_default.jpg" alt="photoURL" />
       </IconButton>
 
       <Popover
@@ -74,7 +77,7 @@ export default function AccountPopover() {
             p: 0,
             mt: 1.5,
             ml: 0.75,
-            width: 180,
+            width: 200,
             "& .MuiMenuItem-root": {
               typography: "body2",
               borderRadius: 0.75,
@@ -84,10 +87,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {account?.displayName}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {account.email}
+            {account?.email}
           </Typography>
         </Box>
 

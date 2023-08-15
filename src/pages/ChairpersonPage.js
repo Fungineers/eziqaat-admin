@@ -32,8 +32,8 @@ import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
-import useChairpersons from "../hooks/useChairpersons";
 import useUnassignedAreas from "src/hooks/useUnassignedAreas";
+import useChairpersons from "../hooks/useChairpersons";
 
 // ----------------------------------------------------------------------
 
@@ -78,8 +78,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function ChairpersonPage() {
-  const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
@@ -107,12 +105,14 @@ export default function ChairpersonPage() {
 
   useEffect(() => {
     chairpersons.fetch();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (assigningId) {
       unassignedAreas.fetch();
     }
+    // eslint-disable-next-line
   }, [assigningId]);
 
   const handleRequestSort = (event, property) => {

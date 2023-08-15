@@ -18,7 +18,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       }}
       {...other}
     >
-      <img src="/icon.png" />
+      <img src="/icon.png" alt="logo" />
     </Box>
   );
 

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 // @mui
 import {
-  Button,
   Card,
   Checkbox,
   Container,
@@ -19,14 +18,10 @@ import {
   Typography,
 } from "@mui/material";
 // components
-import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
-import useAreas from "src/hooks/useAreas";
-import useOfficeSecretaries from "src/hooks/useOfficeSecretaries";
-import { useNavigate } from "react-router-dom";
 import useDonors from "src/hooks/useDonors";
 
 // ----------------------------------------------------------------------
@@ -70,8 +65,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function DonorPage() {
-  const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
@@ -88,6 +81,7 @@ export default function DonorPage() {
 
   useEffect(() => {
     donors.fetch();
+    // eslint-disable-next-line
   }, []);
 
   const handleRequestSort = (event, property) => {
@@ -139,8 +133,6 @@ export default function DonorPage() {
   const filteredUsers = applySortFilter(donors.data, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
-
-  const navigate = useNavigate();
 
   return (
     <>

@@ -44,6 +44,9 @@ const useNewOfficeSecretary = () => {
           const message = err?.response?.data?.message || "Something went wrong";
           toast(message, { type: "error" });
           setError(message);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     },
   });

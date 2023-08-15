@@ -24,9 +24,8 @@ import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
-import useAreas from "src/hooks/useAreas";
-import useOfficeSecretaries from "src/hooks/useOfficeSecretaries";
 import { useNavigate } from "react-router-dom";
+import useOfficeSecretaries from "src/hooks/useOfficeSecretaries";
 
 // ----------------------------------------------------------------------
 
@@ -69,8 +68,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function OfficeSecretaryPage() {
-  const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
@@ -87,6 +84,7 @@ export default function OfficeSecretaryPage() {
 
   useEffect(() => {
     officeSecretries.fetch();
+    // eslint-disable-next-line
   }, []);
 
   const handleRequestSort = (event, property) => {
@@ -192,28 +190,28 @@ export default function OfficeSecretaryPage() {
                             <Checkbox checked={selectedArea} onChange={(event) => handleClick(event, id)} />
                           </TableCell>
 
-                          <TableCell component="th" scope="row" padding="normal">
+                          <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="normal">
+                          <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {email}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="normal">
+                          <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {phone}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="normal">
+                          <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {cnic}
