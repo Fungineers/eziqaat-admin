@@ -184,28 +184,28 @@ export default function DonorPage() {
                             <Checkbox checked={selectedArea} onChange={(event) => handleClick(event, id)} />
                           </TableCell>
 
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {email}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {phone}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {cnic}

@@ -144,13 +144,13 @@ export default function OfficeSecretaryPage() {
   return (
     <>
       <Helmet>
-        <title> Office Secretary | Eziqaat Admin </title>
+        <title> Office Secretaries | Eziqaat Admin </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Office Secretary
+            Office Secretaries
           </Typography>
           <Button
             variant="contained"
@@ -192,28 +192,28 @@ export default function OfficeSecretaryPage() {
                             <Checkbox checked={selectedArea} onChange={(event) => handleClick(event, id)} />
                           </TableCell>
 
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {email}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {phone}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {cnic}

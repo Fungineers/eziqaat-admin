@@ -17,17 +17,18 @@ const useDonations = () => {
       .then((res) => {
         const { donations } = res.data;
         setData(
-          donations.reduce(
-            (prev, curr) => {
-              return { ...prev, [curr.status]: [...prev[curr.status], curr] };
-            },
-            {
-              REQUESTED: [],
-              PENDING: [],
-              ACCEPTED: [],
-              COLLECTED: [],
-            }
-          )
+          donations
+          // donations.reduce(
+          //   (prev, curr) => {
+          //     return { ...prev, [curr.status]: [...prev[curr.status], curr] };
+          //   },
+          //   {
+          //     REQUESTED: [],
+          //     PENDING: [],
+          //     ACCEPTED: [],
+          //     COLLECTED: [],
+          //   }
+          // )
         );
       })
       .catch((err) => {

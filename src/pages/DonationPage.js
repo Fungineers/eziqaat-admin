@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 // @mui
 import {
-  Button,
   Card,
   Checkbox,
   Container,
@@ -19,16 +18,14 @@ import {
   Typography,
 } from "@mui/material";
 // components
-import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
-import useAreas from "src/hooks/useAreas";
-import useOfficeSecretaries from "src/hooks/useOfficeSecretaries";
 import { useNavigate } from "react-router-dom";
-import useDonors from "src/hooks/useDonors";
 import useDonations from "src/hooks/useDonations";
+import Label from "src/components/label/Label";
+import { sentenceCase } from "change-case";
 
 // ----------------------------------------------------------------------
 
@@ -65,7 +62,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_donor) => _donor.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_donation) => _donation.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -85,14 +82,11 @@ export default function DonationPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const donors = useDonors();
   const donations = useDonations();
+
   useEffect(() => {
-    donors.fetch();
     donations.fetch();
   }, []);
-
-  console.log(donations.data);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -102,7 +96,7 @@ export default function DonationPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = donors.data.map((n) => n.id);
+      const newSelecteds = donations.data.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -138,9 +132,9 @@ export default function DonationPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - donors.data.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - donations.data.length) : 0;
 
-  const filteredUsers = applySortFilter(donors.data, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(donations.data, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -149,20 +143,20 @@ export default function DonationPage() {
   return (
     <>
       <Helmet>
-        <title> Donors | Eziqaat Admin </title>
+        <title> Donations | Eziqaat Admin </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Donors
+            Donations
           </Typography>
         </Stack>
 
         <Card>
           <ListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          {donors.loading ? (
+          {donations.loading ? (
             <LinearProgress />
           ) : (
             <Scrollbar>
@@ -172,14 +166,46 @@ export default function DonationPage() {
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
-                    rowCount={donors.data.length}
+                    rowCount={donations.data.length}
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
-                      const { id, name, email, phone, cnic } = row;
+                      const {
+                        id,
+                        amount,
+                        address,
+                        status,
+                        refName,
+                        refPhone,
+                        donorId,
+                        workerId,
+                        areaId,
+                        createdAt,
+                        updatedAt,
+                        requestedAt,
+                        approvedAt,
+                        acceptedAt,
+                        collectedAt,
+                        areaName,
+                        chairpersonId,
+                        active,
+                        assignedAt,
+                        chairpersonName,
+                        chairpersonPhone,
+                        chairpersonCnic,
+                        chairpersonEmail,
+                        donorName,
+                        donorPhone,
+                        donorCnic,
+                        donorEmail,
+                        workerName,
+                        workerPhone,
+                        workerCnic,
+                        workerEmail,
+                      } = row;
                       const selectedArea = selected.indexOf(id) !== -1;
 
                       return (
@@ -188,33 +214,47 @@ export default function DonationPage() {
                             <Checkbox checked={selectedArea} onChange={(event) => handleClick(event, id)} />
                           </TableCell>
 
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
+                          <TableCell component="th" scope="row" padding="normal">
+                            <Stack direction="column">
+                              <Typography variant="subtitle1" noWrap>
+                                {donorName || refName}
+                              </Typography>
+                              <Typography variant="subtitle2" color="gray" noWrap>
+                                (Ph) {donorPhone || refPhone}
+                              </Typography>
+                              <Typography variant="subtitle2" color="gray" noWrap>
+                                (Email) {donorEmail || "N/A"}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {email}
+                                {amount}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="normal">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {phone}
+                                {address || "On-Premises"}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Typography variant="subtitle2" noWrap>
-                                {cnic}
-                              </Typography>
-                            </Stack>
+                          <TableCell align="left">
+                            <Label
+                              color={
+                                status === "REQUESTED"
+                                  ? "warning"
+                                  : status === "PENDING"
+                                  ? "error"
+                                  : status === "ACCEPTED"
+                                  ? "primary"
+                                  : "success"
+                              }
+                            >
+                              {sentenceCase(status)}
+                            </Label>
                           </TableCell>
                         </TableRow>
                       );
@@ -257,7 +297,7 @@ export default function DonationPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={donors.data.length}
+            count={donations.data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
