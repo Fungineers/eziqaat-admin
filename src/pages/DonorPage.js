@@ -1,4 +1,3 @@
-import { sentenceCase } from "change-case";
 import { filter } from "lodash";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -8,11 +7,8 @@ import {
   Card,
   Checkbox,
   Container,
-  IconButton,
   LinearProgress,
-  MenuItem,
   Paper,
-  Popover,
   Stack,
   Table,
   TableBody,
@@ -24,23 +20,22 @@ import {
 } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
-import Label from "../components/label";
 import Scrollbar from "../components/scrollbar";
 // sections
 import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 // mock
 import useAreas from "src/hooks/useAreas";
-import moment from "moment/moment";
-import { LoadingButton } from "@mui/lab";
+import useOfficeSecretaries from "src/hooks/useOfficeSecretaries";
+import { useNavigate } from "react-router-dom";
+import useDonors from "src/hooks/useDonors";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "fullname", label: "Full Name", alignRight: false },
-  { id: "email", label: "email", alignRight: false },
-  { id: "phonenumber", label: "Phone Number", alignRight: false },
-  { id: "cnic", label: "CNIC" },
-  { id: "actions", label: "Actions" },
+  { id: "name", label: "Name", alignRight: false },
+  { id: "email", label: "Email Address", alignRight: false },
+  { id: "phone", label: "Phone Number", alignRight: false },
+  { id: "cnic", label: "CNIC Number" },
 ];
 
 // ----------------------------------------------------------------------
@@ -69,7 +64,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_area) => _area.areaName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_donor) => _donor.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -83,26 +78,17 @@ export default function DonorPage() {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState("areaName");
+  const [orderBy, setOrderBy] = useState("name");
 
   const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const areas = useAreas();
+  const donors = useDonors();
 
   useEffect(() => {
-    areas.fetch();
+    donors.fetch();
   }, []);
-
-  const handleOpenMenu = (event) => {
-    console.log(event.currentTarget);
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -112,7 +98,7 @@ export default function DonorPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = areas.data.map((n) => n.id);
+      const newSelecteds = donors.data.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -148,11 +134,13 @@ export default function DonorPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - areas.data.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - donors.data.length) : 0;
 
-  const filteredUsers = applySortFilter(areas.data, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(donors.data, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -170,7 +158,7 @@ export default function DonorPage() {
         <Card>
           <ListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          {areas.loading ? (
+          {donors.loading ? (
             <LinearProgress />
           ) : (
             <Scrollbar>
@@ -180,23 +168,14 @@ export default function DonorPage() {
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
-                    rowCount={areas.data.length}
+                    rowCount={donors.data.length}
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
-                      const {
-                        id,
-                        areaName,
-                        active,
-                        chairpersonId,
-                        chairpersonName,
-                        chairpersonPhone,
-                        chairpersonEmail,
-                        assignedAt,
-                      } = row;
+                      const { id, name, email, phone, cnic } = row;
                       const selectedArea = selected.indexOf(id) !== -1;
 
                       return (
@@ -208,37 +187,30 @@ export default function DonorPage() {
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                Saad Ashraf
+                                {name}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                saad@gmail.com
+                                {email}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                03361234567
+                                {phone}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {/* {areaName} */}
-                                42101-12345678-0
+                                {cnic}
                               </Typography>
                             </Stack>
-                          </TableCell>
-                          <TableCell align="left">
-                            <Label color="success">View Details</Label>
                           </TableCell>
                         </TableRow>
                       );
@@ -281,7 +253,7 @@ export default function DonorPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={areas.data.length}
+            count={donors.data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

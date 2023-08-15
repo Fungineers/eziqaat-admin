@@ -84,6 +84,10 @@ const getOfficeSecretaries = () => {
   return api.get("/user/office-secretary");
 };
 
+const getDonors = () => {
+  return api.get("/donor");
+};
+
 const createArea = ({ areaName }) => {
   return api.post("/area", { areaName });
 };
@@ -120,6 +124,7 @@ export const useApi = () => {
     getChairpersons,
     getChairpersonById,
     getAllAreas,
+    getDonors,
     createArea,
     assignAreaToChairperson,
     unassignAreaFromChairperson,
