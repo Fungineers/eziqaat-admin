@@ -16,6 +16,7 @@ import NewChairpersonPage from "./pages/NewChairpersonPage";
 import NewOfficeSecretaryPage from "./pages/NewOfficeSecretaryPage";
 import { useAuth } from "./contexts/auth.context";
 import { Box, CircularProgress, LinearProgress, Stack } from "@mui/material";
+import DonationPage from "./pages/DonationPage";
 
 export default function Router() {
   const auth = useAuth();
@@ -49,7 +50,25 @@ export default function Router() {
         { path: "office-secretary", element: <OfficeSecretaryPage /> },
         { path: "office-secretary/create", element: <NewOfficeSecretaryPage /> },
         { path: "donors", element: <DonorPage /> },
-        { path: "donations", element: <UserPage /> },
+        { path: "donations", element: <DonationPage /> },
+        { path: "settings", element: <UserPage /> },
+      ],
+    },
+    {
+      path: "*",
+      element: <Navigate to="/dashboard" />,
+    },
+  ]);
+
+  const officeSecretaryRoutes = useRoutes([
+    {
+      path: "/dashboard",
+      element: <DashboardLayout />,
+      children: [
+        { element: <Navigate to="/dashboard/app" />, index: true },
+        { path: "app", element: <DashboardAppPage /> },
+        { path: "donors", element: <DonorPage /> },
+        { path: "donations", element: <DonationPage /> },
         { path: "settings", element: <UserPage /> },
       ],
     },
@@ -68,7 +87,14 @@ export default function Router() {
   }
 
   if (auth.data.signedIn) {
-    return generalSecretaryRoutes;
+    switch (auth.data.user?.role) {
+      case "GENERAL_SECRETARY":
+        return generalSecretaryRoutes;
+      case "OFFICE_SECRETARY":
+        return officeSecretaryRoutes;
+      default:
+        return <Page404 />;
+    }
   }
 
   return authRoutes;

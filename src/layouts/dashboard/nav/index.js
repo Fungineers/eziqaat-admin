@@ -13,7 +13,7 @@ import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/scrollbar";
 import NavSection from "../../../components/nav-section";
 //
-import navConfig from "./config";
+import useNavConfig from "./config";
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +45,8 @@ export default function Nav({ openNav, onCloseNav }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  const navConfig = useNavConfig();
 
   const renderContent = (
     <Scrollbar

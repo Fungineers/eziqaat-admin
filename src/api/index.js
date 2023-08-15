@@ -88,6 +88,10 @@ const getDonors = () => {
   return api.get("/donor");
 };
 
+const getAllDonations = () => {
+  return api.get("/donation");
+};
+
 const createArea = ({ areaName }) => {
   return api.post("/area", { areaName });
 };
@@ -124,6 +128,7 @@ export const useApi = () => {
     getChairpersons,
     getChairpersonById,
     getAllAreas,
+    getAllDonations,
     getDonors,
     createArea,
     assignAreaToChairperson,
