@@ -4,8 +4,6 @@ import { useLocation } from "react-router-dom";
 // @mui
 import { styled, alpha } from "@mui/material/styles";
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from "@mui/material";
-// mock
-import account from "../../../_mock/account";
 // hooks
 import useResponsive from "../../../hooks/useResponsive";
 // components
@@ -14,6 +12,7 @@ import Scrollbar from "../../../components/scrollbar";
 import NavSection from "../../../components/nav-section";
 //
 import useNavConfig from "./config";
+import useAccount from "src/hooks/useAccount";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +35,8 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
+
+  const account = useAccount();
 
   const isDesktop = useResponsive("up", "lg");
 

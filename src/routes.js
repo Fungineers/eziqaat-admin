@@ -3,20 +3,19 @@ import { Navigate, useRoutes } from "react-router-dom";
 import DashboardLayout from "./layouts/dashboard";
 import SimpleLayout from "./layouts/simple";
 //
-import UserPage from "./pages/UserPage";
-import LoginPage from "./pages/LoginPage";
-import Page404 from "./pages/Page404";
-import DashboardAppPage from "./pages/DashboardAppPage";
+import { CircularProgress, Stack } from "@mui/material";
+import { useAuth } from "./contexts/auth.context";
 import AreaPage from "./pages/AreaPage";
 import ChairpersonPage from "./pages/ChairpersonPage";
+import DashboardAppPage from "./pages/DashboardAppPage";
+import DonationPage from "./pages/DonationPage";
 import DonorPage from "./pages/DonorPage";
-import OfficeSecretaryPage from "./pages/OfficeSecretaryPage";
+import LoginPage from "./pages/LoginPage";
 import NewAreaPage from "./pages/NewAreaPage";
 import NewChairpersonPage from "./pages/NewChairpersonPage";
 import NewOfficeSecretaryPage from "./pages/NewOfficeSecretaryPage";
-import { useAuth } from "./contexts/auth.context";
-import { Box, CircularProgress, LinearProgress, Stack } from "@mui/material";
-import DonationPage from "./pages/DonationPage";
+import OfficeSecretaryPage from "./pages/OfficeSecretaryPage";
+import Page404 from "./pages/Page404";
 
 export default function Router() {
   const auth = useAuth();
@@ -51,7 +50,7 @@ export default function Router() {
         { path: "office-secretary/create", element: <NewOfficeSecretaryPage /> },
         { path: "donors", element: <DonorPage /> },
         { path: "donations", element: <DonationPage /> },
-        { path: "settings", element: <UserPage /> },
+        // { path: "settings", element: <UserPage /> },
       ],
     },
     {
@@ -69,7 +68,7 @@ export default function Router() {
         { path: "app", element: <DashboardAppPage /> },
         { path: "donors", element: <DonorPage /> },
         { path: "donations", element: <DonationPage /> },
-        { path: "settings", element: <UserPage /> },
+        // { path: "settings", element: <UserPage /> },
       ],
     },
     {
