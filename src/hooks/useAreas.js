@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { useApi } from "src/api";
 
 const useAreas = () => {
@@ -29,8 +30,6 @@ const useAreas = () => {
       });
   };
 
-  const getIndex = (id) => data.findIndex((item) => item.id === id);
-
   const unassign = (areaId) => {
     setUnassigning(areaId);
 
@@ -39,8 +38,12 @@ const useAreas = () => {
         .unassignAreaFromChairperson({ areaId })
         .then(() => {
           fetch();
+          toast("Area unassigned", { type: "error" });
         })
-        .catch((err) => {})
+        .catch((err) => {
+          const message = err?.response?.data?.message;
+          toast(message, { type: "error" });
+        })
         .finally(() => {
           setUnassigning(null);
         });
@@ -53,8 +56,12 @@ const useAreas = () => {
         .enableArea({ id })
         .then(() => {
           fetch();
+          toast("Area enabled", { type: "error" });
         })
-        .catch((err) => {})
+        .catch((err) => {
+          const message = err?.response?.data?.message;
+          toast(message, { type: "error" });
+        })
         .finally(() => {
           setEnabling(null);
         });
@@ -68,8 +75,12 @@ const useAreas = () => {
         .disableArea({ id })
         .then(() => {
           fetch();
+          toast("Area disabled", { type: "error" });
         })
-        .catch((err) => {})
+        .catch((err) => {
+          const message = err?.response?.data?.message;
+          toast(message, { type: "error" });
+        })
         .finally(() => {
           setDisabling(null);
         });

@@ -7,9 +7,6 @@ const useOfficeSecretaries = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [unassigning, setUnassigning] = useState(null);
-  const [enabling, setEnabling] = useState(false);
-  const [disabling, setDisabling] = useState(false);
 
   const fetch = () => {
     setLoading(true);

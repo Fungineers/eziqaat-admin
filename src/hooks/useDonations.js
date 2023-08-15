@@ -16,20 +16,7 @@ const useDonations = () => {
       .getAllDonations()
       .then((res) => {
         const { donations } = res.data;
-        setData(
-          donations
-          // donations.reduce(
-          //   (prev, curr) => {
-          //     return { ...prev, [curr.status]: [...prev[curr.status], curr] };
-          //   },
-          //   {
-          //     REQUESTED: [],
-          //     PENDING: [],
-          //     ACCEPTED: [],
-          //     COLLECTED: [],
-          //   }
-          // )
-        );
+        setData(donations);
       })
       .catch((err) => {
         setError(err?.response?.data?.message);
