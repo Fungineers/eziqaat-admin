@@ -76,6 +76,10 @@ const getAllAreas = () => {
   return api.get("/area/all");
 };
 
+const getUnassignedAreas = () => {
+  return api.get("/area/unassigned");
+};
+
 const getChairpersons = () => {
   return api.get("/user/chairperson");
 };
@@ -128,6 +132,7 @@ export const useApi = () => {
     getChairpersons,
     getChairpersonById,
     getAllAreas,
+    getUnassignedAreas,
     getAllDonations,
     getDonors,
     createArea,

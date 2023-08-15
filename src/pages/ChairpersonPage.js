@@ -3,12 +3,18 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 // @mui
 import {
+  Box,
   Button,
   Card,
   Checkbox,
   Container,
+  FormControl,
+  InputLabel,
   LinearProgress,
+  MenuItem,
   Paper,
+  Popover,
+  Select,
   Stack,
   Table,
   TableBody,
@@ -27,6 +33,7 @@ import { ListHead, ListToolbar } from "../sections/@dashboard/list";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
 import useChairpersons from "../hooks/useChairpersons";
+import useUnassignedAreas from "src/hooks/useUnassignedAreas";
 
 // ----------------------------------------------------------------------
 
@@ -87,9 +94,26 @@ export default function ChairpersonPage() {
 
   const chairpersons = useChairpersons();
 
+  const unassignedAreas = useUnassignedAreas();
+
+  const [assigningId, setAssigningId] = useState(null);
+
+  const [areaId, setAreaId] = useState(null);
+
+  const handleClose = () => {
+    setAssigningId(null);
+    setAreaId(null);
+  };
+
   useEffect(() => {
     chairpersons.fetch();
   }, []);
+
+  useEffect(() => {
+    if (assigningId) {
+      unassignedAreas.fetch();
+    }
+  }, [assigningId]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -242,12 +266,7 @@ export default function ChairpersonPage() {
                                   Unassign
                                 </LoadingButton>
                               ) : (
-                                <Button
-                                  disabled={chairpersons.unassigning !== null}
-                                  onClick={() => chairpersons.unassign(areaId)}
-                                >
-                                  Assign
-                                </Button>
+                                <Button onClick={() => setAssigningId(id)}>Assign</Button>
                               )}
                             </Stack>
                           </TableCell>
@@ -300,6 +319,88 @@ export default function ChairpersonPage() {
           />
         </Card>
       </Container>
+      <Popover
+        open={Boolean(assigningId !== null)}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          p: 0,
+        }}
+        PaperProps={{
+          sx: {
+            position: "fixed",
+            top: 0,
+            left: 0,
+            background: "transparent",
+            boxShadow: "none",
+            "& .MuiMenuItem-root": {
+              typography: "body2",
+              borderRadius: 0.75,
+            },
+          },
+        }}
+      >
+        <Stack
+          onClick={handleClose}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ width: "100svw", height: "100svh", position: "fixed", top: 0, left: 0, bgcolor: "#0008" }}
+        >
+          <Box
+            onClick={(e) => e.stopPropagation()}
+            bgcolor="#fff"
+            borderRadius={2}
+            maxWidth={512}
+            boxShadow={10}
+            width="100%"
+          >
+            {unassignedAreas.loading && <LinearProgress />}
+            <Stack p={4} gap={2} direction="column">
+              <Typography variant="h4" gutterBottom>
+                Assign Area
+              </Typography>
+              <FormControl fullWidth>
+                <InputLabel id="area-select" sx={{ bgcolor: "#fff", pr: "6px" }}>
+                  Select Area
+                </InputLabel>
+                <Select
+                  labelId="area-select"
+                  id="demo-simple-select"
+                  value={areaId}
+                  label="Age"
+                  onChange={(e) => {
+                    setAreaId(e.target.value);
+                  }}
+                >
+                  <MenuItem value={null} disabled>
+                    --Select--
+                  </MenuItem>
+                  {unassignedAreas.data.map((a) => (
+                    <MenuItem key={a.id} value={a.id}>
+                      {a.areaName}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <LoadingButton
+                variant="contained"
+                loading={chairpersons.assigning}
+                disabled={!assigningId || !areaId || chairpersons.assigning}
+                onClick={() => {
+                  chairpersons.assign(areaId, assigningId);
+                }}
+              >
+                Assign
+              </LoadingButton>
+            </Stack>
+          </Box>
+        </Stack>
+      </Popover>
     </>
   );
 }
