@@ -15,7 +15,7 @@ export default function NewAreaPage() {
       </Helmet>
 
       <Container>
-        <Card sx={{ maxWidth: 512, marginLeft: "auto", marginRight: "auto" }}>
+        <Card sx={{ maxWidth: 512 }}>
           {newArea.loading && <LinearProgress />}
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">

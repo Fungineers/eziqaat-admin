@@ -14,9 +14,28 @@ import OfficeSecretaryPage from "./pages/OfficeSecretaryPage";
 import NewAreaPage from "./pages/NewAreaPage";
 import NewChairpersonPage from "./pages/NewChairpersonPage";
 import NewOfficeSecretaryPage from "./pages/NewOfficeSecretaryPage";
+import { useAuth } from "./contexts/auth.context";
+import { Box, CircularProgress, LinearProgress, Stack } from "@mui/material";
 
 export default function Router() {
-  const routes = useRoutes([
+  const auth = useAuth();
+
+  const authRoutes = useRoutes([
+    {
+      path: "login",
+      element: <LoginPage />,
+    },
+    {
+      element: <SimpleLayout />,
+      children: [{ element: <Navigate to="/login" />, index: true }],
+    },
+    {
+      path: "*",
+      element: <Navigate to="/login" />,
+    },
+  ]);
+
+  const generalSecretaryRoutes = useRoutes([
     {
       path: "/dashboard",
       element: <DashboardLayout />,
@@ -35,22 +54,22 @@ export default function Router() {
       ],
     },
     {
-      path: "login",
-      element: <LoginPage />,
-    },
-    {
-      element: <SimpleLayout />,
-      children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: "404", element: <Page404 /> },
-        { path: "*", element: <Navigate to="/404" /> },
-      ],
-    },
-    {
       path: "*",
-      element: <Navigate to="/404" replace />,
+      element: <Navigate to="/dashboard" />,
     },
   ]);
 
-  return routes;
+  if (auth.data.authenticating) {
+    return (
+      <Stack direction="column" alignItems="center" justifyContent="center" sx={{ height: "100svh" }}>
+        <CircularProgress />
+      </Stack>
+    );
+  }
+
+  if (auth.data.signedIn) {
+    return generalSecretaryRoutes;
+  }
+
+  return authRoutes;
 }

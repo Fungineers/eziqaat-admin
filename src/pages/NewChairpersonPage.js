@@ -15,7 +15,7 @@ export default function NewChairpersonPage() {
       </Helmet>
 
       <Container>
-        <Card sx={{ maxWidth: 766, marginLeft: "auto", marginRight: "auto" }}>
+        <Card sx={{ maxWidth: 766 }}>
           {newChairperson.loading && <LinearProgress />}
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">

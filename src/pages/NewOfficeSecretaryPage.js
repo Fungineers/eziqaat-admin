@@ -15,7 +15,7 @@ export default function NewOfficeSecretaryPage() {
       </Helmet>
 
       <Container>
-        <Card sx={{ maxWidth: 766, marginLeft: "auto", marginRight: "auto" }}>
+        <Card sx={{ maxWidth: 766 }}>
           {newOfficeSecretary.loading && <LinearProgress />}
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -28,6 +28,7 @@ export default function NewOfficeSecretaryPage() {
                 name="firstName"
                 id="firstName"
                 label="First Name"
+                fullWidth
                 value={newOfficeSecretary.form.values.firstName}
                 error={!!newOfficeSecretary.form.errors.firstName}
                 helperText={newOfficeSecretary.form.errors.firstName}
@@ -38,6 +39,7 @@ export default function NewOfficeSecretaryPage() {
                 name="lastName"
                 id="lastName"
                 label="Last Name"
+                fullWidth
                 value={newOfficeSecretary.form.values.lastName}
                 error={!!newOfficeSecretary.form.errors.lastName}
                 helperText={newOfficeSecretary.form.errors.lastName}
