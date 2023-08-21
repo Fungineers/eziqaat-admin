@@ -48,36 +48,59 @@ export default function SettingsPage() {
                 Account
               </Typography>
             </Stack>
-            <TextField
-              name="email"
-              id="email"
-              label="Email Address"
-              type="email"
-              value={settings.profileForm.values.email}
-              error={!!settings.profileForm.errors.email}
-              helperText={settings.profileForm.errors.email}
-            />
-            <TextField
-              name="phone"
-              id="phone"
-              label="Phone Number"
-              value={settings.profileForm.values.phone}
-              error={!!settings.profileForm.errors.phone}
-              helperText={settings.profileForm.errors.phone}
-            />
-            {settings.message && <div>{settings.message}</div>} {/* Display the message */}
-            <LoadingButton
-              fullWidth
-              startIcon={<Iconify icon="dashicons:update" />}
-              size="large"
-              type="button"
-              variant="contained"
-              //   onClick={settings.form.handleSubmit}
-              loading={settings.loading}
-              disabled={settings.loading}
-            >
-              Update
-            </LoadingButton>
+            <Stack>
+              <TextField
+                name="email"
+                id="email"
+                label="Email Address"
+                type="email"
+                sx={{ mb: 2 }}
+                value={settings.emailForm.values.email}
+                error={!!settings.emailForm.errors.email}
+                helperText={settings.emailForm.errors.email}
+                onChange={settings.emailForm.handleChange("email")}
+                onBlur={settings.emailForm.handleBlur("email")}
+              />
+              {settings.message && <div>{settings.message}</div>} {/* Display the message */}
+              <LoadingButton
+                startIcon={<Iconify icon="dashicons:update" />}
+                size="large"
+                type="button"
+                variant="contained"
+                sx={{ mb: 3 }}
+                onClick={settings.emailForm.handleSubmit}
+                loading={settings.loading}
+                disabled={settings.loading}
+              >
+                Update Email
+              </LoadingButton>
+            </Stack>
+            <Stack>
+              <TextField
+                name="phone"
+                id="phone"
+                label="Phone Number"
+                sx={{ mb: 2 }}
+                value={settings.phoneForm.values.phone}
+                error={!!settings.phoneForm.errors.phone}
+                helperText={settings.phoneForm.errors.phone}
+                onChange={settings.phoneForm.handleChange("phone")}
+                onBlur={settings.phoneForm.handleBlur("phone")}
+              />
+              {settings.message && <div>{settings.message}</div>} {/* Display the message */}
+              <LoadingButton
+                startIcon={<Iconify icon="dashicons:update" />}
+                size="large"
+                type="button"
+                variant="contained"
+                sx={{ mb: 3 }}
+                onClick={settings.phoneForm.handleSubmit}
+                loading={settings.loading}
+                disabled={settings.loading}
+              >
+                Update Phone Number
+              </LoadingButton>
+            </Stack>
           </Stack>
         </Card>
         <Card sx={{ maxWidth: 1000 }}>
@@ -94,9 +117,11 @@ export default function SettingsPage() {
               id="currentPassword"
               label="Current Password"
               type="password"
-              value={settings.passwordForm.values.currPassword}
-              error={!!settings.passwordForm.errors.currPassword}
-              helperText={settings.passwordForm.errors.currPassword}
+              value={settings.passwordForm.values.currentPassword}
+              error={!!settings.passwordForm.errors.currentPassword}
+              helperText={settings.passwordForm.errors.currentPassword}
+              onChange={settings.passwordForm.handleChange("currentPassword")}
+              onBlur={settings.passwordForm.handleBlur("currentPassword")}
             />
             <TextField
               name="newPassword"
@@ -106,6 +131,8 @@ export default function SettingsPage() {
               value={settings.passwordForm.values.newPassword}
               error={!!settings.passwordForm.errors.newPassword}
               helperText={settings.passwordForm.errors.newPassword}
+              onChange={settings.passwordForm.handleChange("newPassword")}
+              onBlur={settings.passwordForm.handleBlur("newPassword")}
             />
             {settings.message && <div>{settings.message}</div>} {/* Display the message */}
             <LoadingButton
@@ -114,7 +141,7 @@ export default function SettingsPage() {
               size="large"
               type="button"
               variant="contained"
-              //   onClick={settings.form.handleSubmit}
+              onClick={settings.passwordForm.handleSubmit}
               loading={settings.loading}
               disabled={settings.loading}
             >
