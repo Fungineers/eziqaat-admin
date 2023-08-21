@@ -38,7 +38,7 @@ const useAreas = () => {
         .unassignAreaFromChairperson({ areaId })
         .then(() => {
           fetch();
-          toast("Area unassigned", { type: "error" });
+          toast("Area unassigned", { type: "suucess" });
         })
         .catch((err) => {
           const message = err?.response?.data?.message;
@@ -56,7 +56,7 @@ const useAreas = () => {
         .enableArea({ id })
         .then(() => {
           fetch();
-          toast("Area enabled", { type: "error" });
+          toast("Area enabled", { type: "success" });
         })
         .catch((err) => {
           const message = err?.response?.data?.message;
@@ -75,7 +75,7 @@ const useAreas = () => {
         .disableArea({ id })
         .then(() => {
           fetch();
-          toast("Area disabled", { type: "error" });
+          toast("Area disabled", { type: "success" });
         })
         .catch((err) => {
           const message = err?.response?.data?.message;
